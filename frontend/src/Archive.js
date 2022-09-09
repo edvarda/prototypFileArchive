@@ -18,9 +18,7 @@ const Archive = ({ files, handleDelete }) => {
           <tr key={file.filename + file.date}>
             <td>
               {/** Probably don't just use filename here */}
-              <a href={`http://localhost:3001/${file.filename}`}>
-                {file.filename}
-              </a>
+              <a href={`http://localhost:3001/${file._id}`}>{file.filename}</a>
             </td>
             <td>{file.uploader}</td>
             <td>{file.type}</td>

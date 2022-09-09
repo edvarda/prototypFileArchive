@@ -9,24 +9,89 @@ body {
 }
 
 .AppContainer {
-  margin:auto;
-  display: flex;
-  flex-direction: column;
+  margin: 2rem auto;
+  max-width: 800px;
   padding: 1em;
 }
+.AppContainer h1 {
+  text-align: center;
+}
 
-.Archive {
+.archive, .uploadForm {
   margin: 1rem;
 }
 
-.Archive table {
+.archive table {
+  border-collapse: collapse;
   border: 1px solid grey;
+  width: 100%;
 }
 
-.UploadForm {
-  margin: 1rem;
+.archive table a {
+  font-size: larger;
+  font-weight: bold;
+  text-decoration: none;
+  color: rgb(80, 80, 150);
 }
 
-.UploadForm form{
- display: flex;
+.archive table a:hover {
+  filter:brightness(200%);
+}
+
+.archive td {
+  padding: 1rem;
+}
+
+.archive thead td {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  background-color: salmon;
+}
+
+form {
+  background-color: white;
+  padding: 30px;
+}
+
+form .input-group {
+  margin-bottom: 1.5rem;
+}
+
+form label {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+form input {
+  padding: 12px 20px;
+  width: 100%;
+  border: 1px solid #ccc;
+}
+
+.button {
+  display: block;
+  border: 0;
+  color:white;
+  font-size: larger;
+  font-weight: bold;
+  margin: 2rem auto;
+  width: 50%;
+  padding: 0.4rem;
+}
+
+.open-form-button {
+  background-color: blueviolet;
+}
+
+.close-form-button {
+  background-color: firebrick;
+}
+
+.submit-button {
+ background-color: rgb(120,200,30);
+}
+
+.delete-button {
+  background-color: transparent;
+  color: black;
 }

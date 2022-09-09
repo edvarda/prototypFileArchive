@@ -5,20 +5,29 @@ import UploadForm from "./UploadForm";
 
 const App = () => {
   const [data, setData] = useState();
+  const [shouldRefetch, setShouldRefetch] = useState(true);
   const [showUploadForm, setShowUploadForm] = useState(false);
 
   useEffect(() => {
     fetch("http://localhost:3001/")
       .then((res) => res.json())
-      .then((data) => setData(data));
-  }, []);
+      .then((data) => {
+        setData(data);
+        setShouldRefetch(false);
+      });
+  }, [shouldRefetch]);
 
-  const handleDelete = (filename) => {
-    fetch("http://localhost:3001/" + filename, {
-      method: "DELETE",
-    })
-      .then((res) => res.json()) // or res.json()
-      .then((res) => console.log(res));
+  const handleDelete = (fileId) => {
+    if (window.confirm("Do you really want to delete this file?")) {
+      fetch("http://localhost:3001/" + fileId, {
+        method: "DELETE",
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res);
+          setShouldRefetch(true);
+        });
+    }
   };
 
   const handleUpload = (formEntry) => {
@@ -31,26 +40,28 @@ const App = () => {
     fetch("http://localhost:3001/upload", {
       method: "POST",
       body: formData,
-      // headers: {
-      //   "Content-Type": "multipart/form-data",
-      // },
     })
-      .then((res) => console.log(res))
+      .then((res) => {
+        console.log(res);
+        setShouldRefetch(true);
+      })
       .catch((err) => console.log(err));
   };
 
   return (
     <div className="AppContainer">
-      <div className="Archive">
+      <h1>File Archive</h1>
+      <div className="archive">
         {!data ? (
           "Loading archive..."
         ) : (
           <Archive handleDelete={handleDelete} files={data} />
         )}
       </div>
-      <div className="UploadForm">
+      <div className="uploadFormContainer">
         {!showUploadForm ? (
           <button
+            className="button open-form-button"
             onClick={() => {
               setShowUploadForm(true);
             }}

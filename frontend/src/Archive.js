@@ -1,4 +1,5 @@
 import { React } from "react";
+import { FileIcon, defaultStyles } from "react-file-icon";
 
 const Archive = ({ files, handleDelete }) => {
   return (
@@ -9,7 +10,7 @@ const Archive = ({ files, handleDelete }) => {
           <td>Uploader</td>
           <td>Type</td>
           <td>Description</td>
-          <td>Date</td>
+          <td>Upload date</td>
           <td>Delete</td>
         </tr>
       </thead>
@@ -21,11 +22,21 @@ const Archive = ({ files, handleDelete }) => {
               <a href={`http://localhost:3001/${file._id}`}>{file.filename}</a>
             </td>
             <td>{file.uploader}</td>
-            <td>{file.type}</td>
-            <td>{file.description}</td>
-            <td>{file.date}</td>
             <td>
-              <button onClick={() => handleDelete(file.filename)}>X</button>
+              <FileIcon
+                extension={file.filetype.split("/")[1]}
+                {...defaultStyles[file.filetype.split("/")[1]]}
+              />
+            </td>
+            <td>{file.description}</td>
+            <td>{new Date(file.date).toLocaleDateString()}</td>
+            <td>
+              <button
+                className="button delete-button"
+                onClick={() => handleDelete(file._id)}
+              >
+                X
+              </button>
             </td>
           </tr>
         ))}

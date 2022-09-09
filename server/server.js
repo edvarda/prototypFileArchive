@@ -41,50 +41,60 @@ app.use(express.json());
 
 // Routes
 app.get("/", async (req, res) => {
-  res.json(await FileMetadata.find());
+  try {
+    const files = await FileMetadata.find();
+    res.status(200).json(files);
+  } catch (err) {
+    res.sendStatus(500);
+  }
 });
 
 app.get("/:fileId", async (req, res) => {
   try {
     const file = await FileMetadata.findById(req.params.fileId);
-    res.download(file.filepath, file.filename); // Error handling here?
+    res.status(200).download(file.filepath, file.filename); // More error handling here?
   } catch (err) {
-    res.json({ message: "file not found" });
+    res.sendStatus(404);
   }
 });
 
 app.delete("/:fileId", async (req, res) => {
+  let file;
+
   try {
     // First see if the record of the file can be found in the db
-    const file = await FileMetadata.findById(req.params.fileId);
+    file = await FileMetadata.findById(req.params.fileId);
   } catch {
-    return res.status(500).json({ message: "file not found" });
+    return res.sendStatus(404);
   }
   try {
     // Then delete the actual file and the record.
-    await fs.unlink(file.filepath);
+    await fs.unlink(file.filepath, (err) => {
+      if (err) throw err;
+    });
     await FileMetadata.deleteOne({ _id: req.params.fileId });
 
     // In the real world, this should maybe have some sort of transaction control, because we're messing with coupled data in two different places.
-    res.json({ message: "file deleted" });
+    res.status(200).json({ message: "file deleted" });
   } catch (err) {
-    res.json({ message: err });
+    res.sendStatus(500);
   }
 });
 
 app.post("/upload", upload.single("file"), async (req, res) => {
   try {
     // console.log(req.body);
-    // console.log(req.file);
+    console.log(req.file);
     const newFile = new FileMetadata({
       ...req.body,
       filepath: req.file.path,
+      filetype: req.file.mimetype,
     });
     let data = await newFile.save();
-    res.json({ message: "file uploaded" });
+    res.status(200).json({ message: "file uploaded" });
   } catch (err) {
-    FileSystem.delete(req.file.path); // TODO Do thing to delete the file.
-    res.json({ message: err });
+    fs.unlink(req.file.path, (err) => {}); // Delete file if something went wrong with writing the metadata.
+    res.sendStatus(500);
   }
 });
 

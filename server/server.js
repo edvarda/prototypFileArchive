@@ -3,10 +3,11 @@ const express = require("express");
 const mongoose = require("mongoose");
 const multer = require("multer");
 const cors = require("cors");
+require("dotenv").config();
 
 // Datastore
 mongoose.connect(
-  "mongodb://localhost:27017/filearchive",
+  process.env.DBCONNECTION,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true, // No idea what this does: check!
@@ -27,7 +28,6 @@ const fileSchema = new mongoose.Schema({
 const FileMetadata = mongoose.model("File", fileSchema);
 
 // Initialize
-const PORT = process.env.PORT || 3001; // Do something here.
 const app = express();
 
 // Middleware setup
@@ -98,6 +98,6 @@ app.post("/upload", upload.single("file"), async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server listening on ${PORT}`);
+app.listen(process.env.PORT, () => {
+  console.log(`Server listening on ${process.env.PORT}`);
 });

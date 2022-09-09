@@ -1,21 +1,17 @@
 import { useForm } from "react-hook-form";
 
-const UploadForm = ({ setShowUploadForm }) => {
+const UploadForm = ({ setShowUploadForm, handleUpload }) => {
   const { register, handleSubmit } = useForm();
-
-  const onSubmit = (data) => {
-    console.log(data);
-  };
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(handleUpload)}>
         <label>Select file:</label>
         <input type="file" {...register("file")} />
-        <label>Uploader name:</label>
-        <input type="text" {...register("uploaderName")} />
         <label>Filename:</label>
-        <input type="text" {...register("fileName")} />
+        <input type="text" {...register("filename")} />
+        <label>Uploader name:</label>
+        <input type="text" {...register("uploader")} />
         <label>Description:</label>
         <input type="text" {...register("description")} />
         <input type="submit" />

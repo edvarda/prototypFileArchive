@@ -21,6 +21,24 @@ const App = () => {
       .then((res) => console.log(res));
   };
 
+  const handleUpload = (formEntry) => {
+    const formData = new FormData();
+    formData.append("file", formEntry.file[0]);
+    formData.append("filename", formEntry.filename);
+    formData.append("uploader", formEntry.uploader);
+    formData.append("description", formEntry.description);
+
+    fetch("http://localhost:3001/upload", {
+      method: "POST",
+      body: formData,
+      // headers: {
+      //   "Content-Type": "multipart/form-data",
+      // },
+    })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
   return (
     <div className="AppContainer">
       <div className="Archive">
@@ -40,7 +58,10 @@ const App = () => {
             Upload file
           </button>
         ) : (
-          <UploadForm setShowUploadForm={setShowUploadForm} />
+          <UploadForm
+            handleUpload={handleUpload}
+            setShowUploadForm={setShowUploadForm}
+          />
         )}
       </div>
     </div>

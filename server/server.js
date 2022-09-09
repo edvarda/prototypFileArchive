@@ -1,3 +1,4 @@
+const fs = require("fs");
 const express = require("express");
 const mongoose = require("mongoose");
 const multer = require("multer");
@@ -34,11 +35,11 @@ const upload = multer({ dest: "uploads/" });
 
 //Here's where I'd pass an options object with allowed origins. Now it's all allowed.
 app.use(cors());
+
 //It appears I need to parse the request body to get the Json.
 app.use(express.json());
-// I don't think we need this?
-// app.use(express.urlencoded({ extended: true }));
 
+// Routes
 app.get("/", async (req, res) => {
   res.json(await FileMetadata.find());
 });
@@ -52,9 +53,20 @@ app.get("/:fileId", async (req, res) => {
   }
 });
 
-app.delete("/:fileId", (req, res) => {
+app.delete("/:fileId", async (req, res) => {
   try {
-    res.json({ message: "deleted file" });
+    // First see if the record of the file can be found in the db
+    const file = await FileMetadata.findById(req.params.fileId);
+  } catch {
+    return res.status(500).json({ message: "file not found" });
+  }
+  try {
+    // Then delete the actual file and the record.
+    await fs.unlink(file.filepath);
+    await FileMetadata.deleteOne({ _id: req.params.fileId });
+
+    // In the real world, this should maybe have some sort of transaction control, because we're messing with coupled data in two different places.
+    res.json({ message: "file deleted" });
   } catch (err) {
     res.json({ message: err });
   }
@@ -62,6 +74,8 @@ app.delete("/:fileId", (req, res) => {
 
 app.post("/upload", upload.single("file"), async (req, res) => {
   try {
+    // console.log(req.body);
+    // console.log(req.file);
     const newFile = new FileMetadata({
       ...req.body,
       filepath: req.file.path,

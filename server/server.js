@@ -7,7 +7,7 @@ require("dotenv").config();
 
 // Datastore
 mongoose.connect(
-  process.env.DBCONNECTION,
+  `${process.env.DBCONNECTION}/filearchive`,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true, // No idea what this does: check!

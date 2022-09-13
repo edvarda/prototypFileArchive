@@ -1,4 +1,7 @@
 # Programming task: Filearchive
+I completed the task not in one sitting, but something like three. First session I read the brief, made some notes and a plan. Second session I coded for a couple of hours and started to get things working (2.5 hour commit), and last session I completed the project.
+
+I like to take notes to organize my thoughts when working. They are kept in [notes.md](./notes.md). 
 
 ## Dependencies
 - The project needs Node.js and a local instance of mongodb to run.

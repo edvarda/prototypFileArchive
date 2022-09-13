@@ -67,7 +67,7 @@ There is a button "Cancel" that removes the form and takes the user back to the 
 ### Backend
 
 #### Routes
-- GET /
+**GET /**
   Returns a listing of files in the archive. 
   ```js
 [
@@ -80,12 +80,13 @@ There is a button "Cancel" that removes the form and takes the user back to the 
 	}, ... 
 ]
 ```
-
-- GET /filename
+**GET /filename**
   Returns a file download of the file if it exists
-- DELETE /filename
+
+**DELETE /filename**
   Deletes the file if it exists
-- POST /upload
+
+**POST /upload**
   Saves the file and metadata to the data store. If successful, give a success response. If anything fails, make sure nothing is stored and give a failed response.
 
 #### The /upload route 
